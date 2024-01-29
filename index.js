@@ -1,34 +1,29 @@
-// Source palette: https://twitter.com/AlexCristache/status/1738610343499157872
-const colorPalette = {
-  MysticMint: '#D9E8E3', //day ball
-  NocturnalExpedition: '#114C5A', //night ball
-};
-
 // Idea for Pong wars: https://twitter.com/nicolasdnl/status/1749715070928433161
 window.wallpaperPropertyListener = {
   applyUserProperties: function (properties) {
-    if (properties.daycolor) {
-      let daycolor = properties.daycolor.value.split(' ');
-      daycolor = daycolor.map(function (c) {
+    if (properties.colorday) {
+      let colorday = properties.colorday.value.split(' ');
+      colorday = colorday.map(function (c) {
         return Math.ceil(c * 255);
       });
 
-      let dayBallColorAsCss = 'rgb(' + daycolor + ')';
+      let dayBallColorAsCss = 'rgb(' + colorday + ')';
 
       colorPalette.MysticMint = dayBallColorAsCss;
+      updateSquareColors();
     }
 
-    if (properties.nightcolor) {
-      let nightcolor = properties.nightcolor.value.split(' ');
-      nightcolor = nightcolor.map(function (c) {
+    if (properties.colornight) {
+      let colornight = properties.colornight.value.split(' ');
+      colornight = colornight.map(function (c) {
         return Math.ceil(c * 255);
       });
 
-      let nightballAsCss = 'rgb(' + nightcolor + ')';
+      let nightballAsCss = 'rgb(' + colornight + ')';
 
       colorPalette.NocturnalExpedition = nightballAsCss;
+      updateSquareColors();
     }
-    console.log(properties);
   },
 };
 
@@ -36,27 +31,28 @@ const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 
-const DAY_COLOR = colorPalette.MysticMint;
-const DAY_BALL_COLOR = colorPalette.NocturnalExpedition;
-
-const NIGHT_COLOR = colorPalette.NocturnalExpedition;
-const NIGHT_BALL_COLOR = colorPalette.MysticMint;
+const colorPalette = {
+  MysticMint: 'rgb(217, 232, 227)', //day ball #D9E8E3
+  NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
+};
 
 const SQUARE_SIZE = 15;
 
 const numSquaresX = canvas.width / SQUARE_SIZE;
 const numSquaresY = canvas.height / SQUARE_SIZE;
 
-console.log({ DAY_COLOR, NIGHT_COLOR });
-
 let squares = [];
+let ballTrail = [];
 
-for (let i = 0; i < numSquaresX; i++) {
-  squares[i] = [];
-  for (let j = 0; j < numSquaresY; j++) {
-    squares[i][j] = i < numSquaresX / 2 ? DAY_COLOR : NIGHT_COLOR;
-  }
-}
+// for (let i = 0; i < numSquaresX; i++) {
+//   squares[i] = [];
+//   for (let j = 0; j < numSquaresY; j++) {
+//     squares[i][j] =
+//       i < numSquaresX / 2
+//         ? colorPalette.MysticMint
+//         : colorPalette.NocturnalExpedition;
+//   }
+// }
 
 let x1 = canvas.width / 4;
 let y1 = canvas.height / 2;
@@ -69,6 +65,50 @@ let dx2 = -7.5;
 let dy2 = 7.5;
 
 let iteration = 0;
+
+function updateSquareColors() {
+  for (let i = 0; i < numSquaresX; i++) {
+    squares[i] = [];
+    for (let j = 0; j < numSquaresY; j++) {
+      squares[i][j] =
+        i < numSquaresX / 2
+          ? colorPalette.MysticMint
+          : colorPalette.NocturnalExpedition;
+    }
+  }
+}
+
+function drawBallTrail(colorRGB) {
+  const matches = colorRGB.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (!matches) {
+    console.error('Formato de color inválido:', colorRGB);
+    return;
+  }
+  const color = {
+    r: parseInt(matches[1]),
+    g: parseInt(matches[2]),
+    b: parseInt(matches[3]),
+    a: 0.2,
+  };
+
+  for (let i = 0; i < ballTrail.length; i++) {
+    let alpha = i / ballTrail.length;
+    ctx.beginPath();
+    ctx.arc(
+      ballTrail[i].x,
+      ballTrail[i].y,
+      SQUARE_SIZE / 2,
+      0,
+      Math.PI * 2,
+      false
+    );
+    ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${
+      color.a * alpha
+    })`;
+    ctx.fill();
+    ctx.closePath();
+  }
+}
 
 function drawBall(x, y, color) {
   ctx.beginPath();
@@ -95,36 +135,62 @@ function updateSquareAndBounce(x, y, dx, dy, color) {
   let updatedDx = dx;
   let updatedDy = dy;
 
-  // Check multiple points around the ball's circumference
-  for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 4) {
-    let checkX = x + Math.cos(angle) * (SQUARE_SIZE / 2);
-    let checkY = y + Math.sin(angle) * (SQUARE_SIZE / 2);
+  // Calcular los límites de la pelota
+  const left = x - SQUARE_SIZE / 2;
+  const right = x + SQUARE_SIZE / 2;
+  const top = y - SQUARE_SIZE / 2;
+  const bottom = y + SQUARE_SIZE / 2;
 
-    let i = Math.floor(checkX / SQUARE_SIZE);
-    let j = Math.floor(checkY / SQUARE_SIZE);
+  // Calcular la nueva posición de la pelota después del movimiento
+  const nextX = x + dx;
+  const nextY = y + dy;
+  const nextLeft = nextX - SQUARE_SIZE / 2;
+  const nextRight = nextX + SQUARE_SIZE / 2;
+  const nextTop = nextY - SQUARE_SIZE / 2;
+  const nextBottom = nextY + SQUARE_SIZE / 2;
 
-    if (i >= 0 && i < numSquaresX && j >= 0 && j < numSquaresY) {
-      if (squares[i][j] !== color) {
-        squares[i][j] = color;
+  // Verificar colisión con cada cuadrado
+  for (let i = 0; i < numSquaresX; i++) {
+      for (let j = 0; j < numSquaresY; j++) {
+          if (squares[i][j] !== color) {
+              // Calcular los límites del cuadrado
+              const squareLeft = i * SQUARE_SIZE;
+              const squareRight = (i + 1) * SQUARE_SIZE;
+              const squareTop = j * SQUARE_SIZE;
+              const squareBottom = (j + 1) * SQUARE_SIZE;
 
-        // Determine bounce direction based on the angle
-        if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
-          updatedDx = -updatedDx;
-        } else {
-          updatedDy = -updatedDy;
-        }
+              // Verificar colisión entre la pelota y el cuadrado
+              if (
+                  nextRight > squareLeft &&
+                  nextLeft < squareRight &&
+                  nextBottom > squareTop &&
+                  nextTop < squareBottom
+              ) {
+                  // Determinar dirección de rebote basado en la posición relativa
+                  const overlapX = Math.min(nextRight - squareLeft, squareRight - nextLeft);
+                  const overlapY = Math.min(nextBottom - squareTop, squareBottom - nextTop);
 
-        // Add some randomness to the bounce to prevent the balls from getting stuck in a loop
-        updatedDx += randomNum(-0.01, 0.01);
-        updatedDy += randomNum(-0.01, 0.01);
+                  if (overlapX < overlapY) {
+                      updatedDx = -updatedDx;
+                  } else {
+                      updatedDy = -updatedDy;
+                  }
+
+                  // Agregar algo de aleatoriedad al rebote
+                  updatedDx += randomNum(-0.01, 0.01);
+                  updatedDy += randomNum(-0.01, 0.01);
+
+                  // Actualizar color del cuadrado
+                  squares[i][j] = color;
+              }
+          }
       }
-    }
   }
 
   return { dx: updatedDx, dy: updatedDy };
 }
 
-function updateScoreElement() {
+function updateScoreElement(DAY_COLOR, NIGHT_COLOR) {
   let dayScore = 0;
   let nightScore = 0;
   for (let i = 0; i < numSquaresX; i++) {
@@ -158,13 +224,26 @@ function draw() {
   const NIGHT_COLOR = colorPalette.NocturnalExpedition;
   const NIGHT_BALL_COLOR = colorPalette.MysticMint;
 
+  ballTrail.push({ x: x1, y: y1 });
+  ballTrail.push({ x: x2, y: y2 });
+
+  // Limitar la longitud de ballTrail
+  const maxTrailLength = 20;
+  if (ballTrail.length > maxTrailLength) {
+    ballTrail = ballTrail.slice(-maxTrailLength);
+  }
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawSquares();
+
+  drawBallTrail(DAY_COLOR);
 
   drawBall(x1, y1, DAY_BALL_COLOR);
   let bounce1 = updateSquareAndBounce(x1, y1, dx1, dy1, DAY_COLOR);
   dx1 = bounce1.dx;
   dy1 = bounce1.dy;
+
+  drawBallTrail(NIGHT_COLOR);
 
   drawBall(x2, y2, NIGHT_BALL_COLOR);
   let bounce2 = updateSquareAndBounce(x2, y2, dx2, dy2, NIGHT_COLOR);
@@ -187,9 +266,10 @@ function draw() {
   iteration++;
   // if (iteration % 1_000 === 0) console.log('interation', iteration);
 
-  updateScoreElement();
+  updateScoreElement(DAY_COLOR, NIGHT_COLOR);
 
   requestAnimationFrame(draw);
 }
 
+updateSquareColors();
 requestAnimationFrame(draw);
