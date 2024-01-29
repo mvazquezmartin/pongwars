@@ -1,32 +1,4 @@
 // Idea for Pong wars: https://twitter.com/nicolasdnl/status/1749715070928433161
-window.wallpaperPropertyListener = {
-  applyUserProperties: function (properties) {
-    if (properties.colorday) {
-      let colorday = properties.colorday.value.split(' ');
-      colorday = colorday.map(function (c) {
-        return Math.ceil(c * 255);
-      });
-
-      let dayBallColorAsCss = 'rgb(' + colorday + ')';
-
-      colorPalette.MysticMint = dayBallColorAsCss;
-      updateSquareColors();
-    }
-
-    if (properties.colornight) {
-      let colornight = properties.colornight.value.split(' ');
-      colornight = colornight.map(function (c) {
-        return Math.ceil(c * 255);
-      });
-
-      let nightballAsCss = 'rgb(' + colornight + ')';
-
-      colorPalette.NocturnalExpedition = nightballAsCss;
-      updateSquareColors();
-    }
-  },
-};
-
 const canvas = document.getElementById('pongCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
@@ -65,6 +37,44 @@ let dx2 = -7.5;
 let dy2 = 7.5;
 
 let iteration = 0;
+
+window.wallpaperPropertyListener = {
+  applyUserProperties: function (properties) {
+    if (properties.daycolor) {
+      let daycolor = properties.daycolor.value.split(' ');
+      daycolor = daycolor.map(function (c) {
+        return Math.ceil(c * 255);
+      });
+
+      let dayBallColorAsCss = 'rgb(' + daycolor + ')';
+
+      colorPalette.MysticMint = dayBallColorAsCss;
+      updateSquareColors();
+    }
+
+    if (properties.nightcolor) {
+      let nightcolor = properties.nightcolor.value.split(' ');
+      nightcolor = nightcolor.map(function (c) {
+        return Math.ceil(c * 255);
+      });
+
+      let nightballAsCss = 'rgb(' + nightcolor + ')';
+
+      colorPalette.NocturnalExpedition = nightballAsCss;
+      updateSquareColors();
+    }
+
+    if(properties.textcolor){
+      let textcolor = properties.textcolor.value.split(' ')
+      textcolor = textcolor.map(function(c){
+        return Math.ceil(c * 255)
+      })
+      let textColorAsCss = 'rgb('+ textcolor + ')'
+      scoreElement.style.color = textColorAsCss
+      
+    }
+  },
+};
 
 function updateSquareColors() {
   for (let i = 0; i < numSquaresX; i++) {
