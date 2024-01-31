@@ -7,8 +7,9 @@ const colorPalette = {
   MysticMint: 'rgb(217, 232, 227)', //day ball #D9E8E3
   NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
 };
-
 const SQUARE_SIZE = 15;
+canvas.width = 1000
+canvas.height = 1080
 
 const numSquaresX = canvas.width / SQUARE_SIZE;
 const numSquaresY = canvas.height / SQUARE_SIZE;
