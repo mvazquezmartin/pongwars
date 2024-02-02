@@ -72,13 +72,13 @@ class Particle {
     this.x = x;
     this.y = y;
     this.color = color;
-    this.radius = 2;
+    this.radius = 1.5;
     this.speed = {
-      x: (Math.random() * 2 - 1) * 0.8,
-      y: (Math.random() * 2 - 1) * 0.8,
+      x: (Math.random() * 2 - 1) ,
+      y: (Math.random() * 2 - 1) ,
     };
     this.opacity = 1;
-    this.fadeOut = 0.07;
+    this.fadeOut = 0.02;
     this.shouldRemove = false;
   }
 
@@ -144,10 +144,7 @@ function updateSquareColors() {
 
 function drawBallTrail(colorRGB) {
   const matches = colorRGB.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-  if (!matches) {
-    console.error('Formato de color inválido:', colorRGB);
-    return;
-  }
+
   const color = {
     r: parseInt(matches[1]),
     g: parseInt(matches[2]),
