@@ -17,7 +17,7 @@ const numSquaresY = canvas.height / SQUARE_SIZE;
 let squares = [];
 let ballTrail = [];
 let particles = [];
-let isDrawParticle = true;
+let isDrawParticle = false;
 
 let x1 = canvas.width / 4;
 let y1 = canvas.height / 2;
