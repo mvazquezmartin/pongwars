@@ -17,15 +17,15 @@ const numSquaresY = canvas.height / SQUARE_SIZE;
 let squares = [];
 let ballTrail = [];
 
-for (let i = 0; i < numSquaresX; i++) {
-  squares[i] = [];
-  for (let j = 0; j < numSquaresY; j++) {
-    squares[i][j] =
-      i < numSquaresX / 2
-        ? colorPalette.MysticMint
-        : colorPalette.NocturnalExpedition;
-  }
-}
+// for (let i = 0; i < numSquaresX; i++) {
+//   squares[i] = [];
+//   for (let j = 0; j < numSquaresY; j++) {
+//     squares[i][j] =
+//       i < numSquaresX / 2
+//         ? colorPalette.MysticMint
+//         : colorPalette.NocturnalExpedition;
+//   }
+// }
 
 let x1 = canvas.width / 4;
 let y1 = canvas.height / 2;
