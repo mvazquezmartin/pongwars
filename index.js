@@ -64,6 +64,15 @@ window.wallpaperPropertyListener = {
       let textColorAsCss = 'rgb(' + textcolor + ')';
       scoreElement.style.color = textColorAsCss;
     }
+    if (properties.hidetitle) {
+      const checkValue = properties.hidetitle.value;
+      scoreElement.style.visibility = checkValue ? 'hidden' : 'visible';
+    }
+    if (properties.ballspeed) {
+      const speed = properties.ballspeed.value;
+      dx1 = dy2 = speed;
+      dy1 = dx2 = -speed;
+    }
   },
 };
 
@@ -74,8 +83,8 @@ class Particle {
     this.color = color;
     this.radius = 1.5;
     this.speed = {
-      x: (Math.random() * 2 - 1) ,
-      y: (Math.random() * 2 - 1) ,
+      x: Math.random() * 2 - 1,
+      y: Math.random() * 2 - 1,
     };
     this.opacity = 1;
     this.fadeOut = 0.02;
