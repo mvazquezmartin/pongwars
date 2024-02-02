@@ -17,6 +17,7 @@ const numSquaresY = canvas.height / SQUARE_SIZE;
 let squares = [];
 let ballTrail = [];
 let particles = [];
+let isDrawParticle = true;
 
 let x1 = canvas.width / 4;
 let y1 = canvas.height / 2;
@@ -72,6 +73,10 @@ window.wallpaperPropertyListener = {
       const speed = properties.ballspeed.value;
       dx1 = dy2 = speed;
       dy1 = dx2 = -speed;
+    }
+    if (properties.hideparticles) {
+      const hideValue = properties.hideparticles.value;
+      isDrawParticle = hideValue;
     }
   },
 };
@@ -334,7 +339,9 @@ function draw() {
   dx2 = bounce2.dx;
   dy2 = bounce2.dy;
 
-  drawParticles();
+  if (!isDrawParticle) {
+    drawParticles();
+  }
 
   let boundary1 = checkBoundaryCollision(x1, y1, dx1, dy1);
   dx1 = boundary1.dx;
