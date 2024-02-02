@@ -8,24 +8,15 @@ const colorPalette = {
   NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
 };
 const SQUARE_SIZE = 15;
-canvas.width = 1000
-canvas.height = 1080
+canvas.width = 1000;
+canvas.height = 1080;
 
 const numSquaresX = canvas.width / SQUARE_SIZE;
 const numSquaresY = canvas.height / SQUARE_SIZE;
 
 let squares = [];
 let ballTrail = [];
-
-// for (let i = 0; i < numSquaresX; i++) {
-//   squares[i] = [];
-//   for (let j = 0; j < numSquaresY; j++) {
-//     squares[i][j] =
-//       i < numSquaresX / 2
-//         ? colorPalette.MysticMint
-//         : colorPalette.NocturnalExpedition;
-//   }
-// }
+let particles = [];
 
 let x1 = canvas.width / 4;
 let y1 = canvas.height / 2;
@@ -65,17 +56,79 @@ window.wallpaperPropertyListener = {
       updateSquareColors();
     }
 
-    if(properties.textcolor){
-      let textcolor = properties.textcolor.value.split(' ')
-      textcolor = textcolor.map(function(c){
-        return Math.ceil(c * 255)
-      })
-      let textColorAsCss = 'rgb('+ textcolor + ')'
-      scoreElement.style.color = textColorAsCss
-      
+    if (properties.textcolor) {
+      let textcolor = properties.textcolor.value.split(' ');
+      textcolor = textcolor.map(function (c) {
+        return Math.ceil(c * 255);
+      });
+      let textColorAsCss = 'rgb(' + textcolor + ')';
+      scoreElement.style.color = textColorAsCss;
     }
   },
 };
+
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.radius = 2;
+    this.speed = {
+      x: (Math.random() * 2 - 1) * 0.8,
+      y: (Math.random() * 2 - 1) * 0.8,
+    };
+    this.opacity = 1;
+    this.fadeOut = 0.07;
+    this.shouldRemove = false;
+  }
+
+  update() {
+    this.x += this.speed.x;
+    this.y += this.speed.y;
+    this.opacity -= this.fadeOut;
+
+    if (this.opacity <= 0) {
+      this.shouldRemove = true;
+    }
+  }
+
+  draw(ctx) {
+    const rgbValues = this.color.match(/\d+/g); // Extraer los valores RGB como números
+    const r = parseInt(rgbValues[0]);
+    const g = parseInt(rgbValues[1]);
+    const b = parseInt(rgbValues[2]);
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`; // Usar los valores RGB extraídos
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+
+function generateParticles(x, y, color) {
+  // console.log(color)
+  const particleColor =
+    color === colorPalette.MysticMint
+      ? colorPalette.NocturnalExpedition
+      : colorPalette.MysticMint;
+  for (let i = 0; i < 20; i++) {
+    const particle = new Particle(x, y, particleColor);
+    particles.push(particle);
+  }
+}
+
+function drawParticles() {
+  particles.forEach((particle, index) => {
+    particle.update();
+    particle.draw(ctx);
+
+    // Eliminar la partícula si debe ser removida
+    if (particle.shouldRemove) {
+      particles.splice(index, 1);
+    }
+  });
+}
 
 function updateSquareColors() {
   for (let i = 0; i < numSquaresX; i++) {
@@ -145,6 +198,7 @@ function randomNum(min, max) {
 function updateSquareAndBounce(x, y, dx, dy, color) {
   let updatedDx = dx;
   let updatedDy = dy;
+  let destroyed = false;
 
   // Calcular los límites de la pelota
   const left = x - SQUARE_SIZE / 2;
@@ -162,43 +216,56 @@ function updateSquareAndBounce(x, y, dx, dy, color) {
 
   // Verificar colisión con cada cuadrado
   for (let i = 0; i < numSquaresX; i++) {
-      for (let j = 0; j < numSquaresY; j++) {
-          if (squares[i][j] !== color) {
-              // Calcular los límites del cuadrado
-              const squareLeft = i * SQUARE_SIZE;
-              const squareRight = (i + 1) * SQUARE_SIZE;
-              const squareTop = j * SQUARE_SIZE;
-              const squareBottom = (j + 1) * SQUARE_SIZE;
+    for (let j = 0; j < numSquaresY; j++) {
+      if (squares[i][j] !== color) {
+        // Calcular los límites del cuadrado
+        const squareLeft = i * SQUARE_SIZE;
+        const squareRight = (i + 1) * SQUARE_SIZE;
+        const squareTop = j * SQUARE_SIZE;
+        const squareBottom = (j + 1) * SQUARE_SIZE;
 
-              // Verificar colisión entre la pelota y el cuadrado
-              if (
-                  nextRight > squareLeft &&
-                  nextLeft < squareRight &&
-                  nextBottom > squareTop &&
-                  nextTop < squareBottom
-              ) {
-                  // Determinar dirección de rebote basado en la posición relativa
-                  const overlapX = Math.min(nextRight - squareLeft, squareRight - nextLeft);
-                  const overlapY = Math.min(nextBottom - squareTop, squareBottom - nextTop);
+        // Verificar colisión entre la pelota y el cuadrado
+        if (
+          nextRight > squareLeft &&
+          nextLeft < squareRight &&
+          nextBottom > squareTop &&
+          nextTop < squareBottom
+        ) {
+          // Determinar dirección de rebote basado en la posición relativa
+          const overlapX = Math.min(
+            nextRight - squareLeft,
+            squareRight - nextLeft
+          );
+          const overlapY = Math.min(
+            nextBottom - squareTop,
+            squareBottom - nextTop
+          );
 
-                  if (overlapX < overlapY) {
-                      updatedDx = -updatedDx;
-                  } else {
-                      updatedDy = -updatedDy;
-                  }
-
-                  // Agregar algo de aleatoriedad al rebote
-                  updatedDx += randomNum(-0.01, 0.01);
-                  updatedDy += randomNum(-0.01, 0.01);
-
-                  // Actualizar color del cuadrado
-                  squares[i][j] = color;
-              }
+          if (overlapX < overlapY) {
+            updatedDx = -updatedDx;
+          } else {
+            updatedDy = -updatedDy;
           }
+
+          // Agregar algo de aleatoriedad al rebote
+          updatedDx += randomNum(-0.01, 0.01);
+          updatedDy += randomNum(-0.01, 0.01);
+
+          // Actualizar color del cuadrado
+          squares[i][j] = color;
+          generateParticles(
+            squareLeft + SQUARE_SIZE,
+            squareTop + SQUARE_SIZE,
+            color
+          );
+
+          destroyed = true;
+        }
       }
+    }
   }
 
-  return { dx: updatedDx, dy: updatedDy };
+  return { dx: updatedDx, dy: updatedDy, destroyed: destroyed };
 }
 
 function updateScoreElement(DAY_COLOR, NIGHT_COLOR) {
@@ -260,6 +327,8 @@ function draw() {
   let bounce2 = updateSquareAndBounce(x2, y2, dx2, dy2, NIGHT_COLOR);
   dx2 = bounce2.dx;
   dy2 = bounce2.dy;
+
+  drawParticles();
 
   let boundary1 = checkBoundaryCollision(x1, y1, dx1, dy1);
   dx1 = boundary1.dx;
