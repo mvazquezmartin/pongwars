@@ -38,6 +38,7 @@ let y2 = canvas.height / 2;
 let dx2 = -7.5;
 let dy2 = 7.5;
 
+// PROPERTY WALLPAPER ENGINE
 window.wallpaperPropertyListener = {
   applyUserProperties: function (properties) {
     if (properties.daycolor) {
