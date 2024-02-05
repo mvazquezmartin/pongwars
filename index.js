@@ -64,14 +64,14 @@ window.wallpaperPropertyListener = {
       updateSquareColors(squares);
     }
 
-    if (properties.textcolor) {
-      let textcolor = properties.textcolor.value.split(' ');
-      textcolor = textcolor.map(function (c) {
-        return Math.ceil(c * 255);
-      });
-      let textColorAsCss = 'rgb(' + textcolor + ')';
-      scoreElement.style.color = textColorAsCss;
-    }
+    // if (properties.textcolor) {
+    //   let textcolor = properties.textcolor.value.split(' ');
+    //   textcolor = textcolor.map(function (c) {
+    //     return Math.ceil(c * 255);
+    //   });
+    //   let textColorAsCss = 'rgb(' + textcolor + ')';
+    //   scoreElement.style.color = textColorAsCss;
+    // }
     if (properties.hidetitle) {
       const checkValue = properties.hidetitle.value;
       scoreElement.style.visibility = checkValue ? 'hidden' : 'visible';
