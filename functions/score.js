@@ -19,7 +19,7 @@ function calculateColorContrast(color1, color2) {
   const [r2, g2, b2] = complementario2.match(/\d+/g).map(Number);
 
   // Aumentar la diferencia entre los colores intermedios
-  const factor = 1; // Puedes ajustar este factor según tus preferencias
+  const factor = 0.7; // Puedes ajustar este factor según tus preferencias
   const intermedioR = Math.round((r1 + r2) / 2 + (r1 - r2) * factor);
   const intermedioG = Math.round((g1 + g2) / 2 + (g1 - g2) * factor);
   const intermedioB = Math.round((b1 + b2) / 2 + (b1 - b2) * factor);
@@ -49,5 +49,5 @@ export function updateScoreElement(
   const contrastColor = calculateColorContrast(DAY_COLOR, NIGHT_COLOR);
 
   // scoreElement.textContent = `day ${dayScore} | night ${nightScore}`;
-  scoreElement.innerHTML = `<span style="color:${DAY_COLOR};-webkit-text-stroke: 0.5px ${contrastColor};">day ${dayScore} </span> <span style="color:${contrastColor}">|</span> <span style="color:${NIGHT_COLOR}; -webkit-text-stroke: 0.5px ${contrastColor};">night ${nightScore}</span>`;
+  scoreElement.innerHTML = `<span style="color:${DAY_COLOR};-webkit-text-stroke: 0.5px ${NIGHT_COLOR};">day ${dayScore} </span> <span style="color:${contrastColor}">|</span> <span style="color:${NIGHT_COLOR}; -webkit-text-stroke: 0.5px ${DAY_COLOR};">night ${nightScore}</span>`;
 }
