@@ -16,11 +16,14 @@ export const colorPalette = {
   NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
 };
 export const SQUARE_SIZE = 15;
-canvas.width = 1000;
-canvas.height = 1080;
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
 
-export const numSquaresX = canvas.width / SQUARE_SIZE;
-export const numSquaresY = canvas.height / SQUARE_SIZE;
+canvas.width = 1000
+canvas.height = 1000
+
+export const numSquaresX = Math.floor(canvas.width / SQUARE_SIZE);
+export const numSquaresY = Math.floor(canvas.height / SQUARE_SIZE);
 
 let squares = [];
 let ballTrail = [];
