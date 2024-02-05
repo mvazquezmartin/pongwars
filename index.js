@@ -7,7 +7,6 @@ import {
 } from './functions/physicBounceAndSquare.js';
 import { updateScoreElement } from './functions/score.js';
 
-// Idea for Pong wars: https://twitter.com/nicolasdnl/status/1749715070928433161
 export const canvas = document.getElementById('pongCanvas');
 export const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
