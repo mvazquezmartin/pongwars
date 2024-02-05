@@ -3,7 +3,7 @@ import {
   numSquaresX,
   numSquaresY,
   ctx,
-  SQUARE_SIZE,
+  SQUARE_SIZE,  
 } from '../index.js';
 
 function updateSquareColors(squares) {
