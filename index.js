@@ -15,12 +15,12 @@ export const colorPalette = {
   MysticMint: 'rgb(217, 232, 227)', //day ball #D9E8E3
   NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
 };
-export const SQUARE_SIZE = 15;
+export let SQUARE_SIZE = 15;
 // canvas.width = window.innerWidth;
 // canvas.height = window.innerHeight;
 
-canvas.width = 1000
-canvas.height = 1000
+canvas.width = 1020;
+canvas.height = 1020;
 
 export const numSquaresX = Math.floor(canvas.width / SQUARE_SIZE);
 export const numSquaresY = Math.floor(canvas.height / SQUARE_SIZE);
@@ -66,15 +66,6 @@ window.wallpaperPropertyListener = {
       colorPalette.NocturnalExpedition = nightballAsCss;
       updateSquareColors(squares);
     }
-
-    // if (properties.textcolor) {
-    //   let textcolor = properties.textcolor.value.split(' ');
-    //   textcolor = textcolor.map(function (c) {
-    //     return Math.ceil(c * 255);
-    //   });
-    //   let textColorAsCss = 'rgb(' + textcolor + ')';
-    //   scoreElement.style.color = textColorAsCss;
-    // }
     if (properties.hidetitle) {
       const checkValue = properties.hidetitle.value;
       scoreElement.style.visibility = checkValue ? 'hidden' : 'visible';
@@ -101,7 +92,7 @@ function draw() {
   ballTrail.push({ x: x1, y: y1 });
   ballTrail.push({ x: x2, y: y2 });
 
-  // Limitar la longitud de ballTrail
+  // ballTrail limit
   const maxTrailLength = 20;
   if (ballTrail.length > maxTrailLength) {
     ballTrail = ballTrail.slice(-maxTrailLength);

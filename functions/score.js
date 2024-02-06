@@ -3,11 +3,11 @@ import { numSquaresX, numSquaresY } from '../index.js';
 function calculateColorContrast(color1, color2) {
   // Función para calcular el color complementario de un color RGB
   function complementaryColor(color) {
-      const [r, g, b] = color.match(/\d+/g).map(Number);
-      const complementarioR = 255 - r;
-      const complementarioG = 255 - g;
-      const complementarioB = 255 - b;
-      return `rgb(${complementarioR}, ${complementarioG}, ${complementarioB})`;
+    const [r, g, b] = color.match(/\d+/g).map(Number);
+    const complementarioR = 255 - r;
+    const complementarioG = 255 - g;
+    const complementarioB = 255 - b;
+    return `rgb(${complementarioR}, ${complementarioG}, ${complementarioB})`;
   }
 
   // Calcular los colores complementarios de ambos colores
