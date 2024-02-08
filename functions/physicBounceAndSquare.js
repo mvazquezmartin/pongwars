@@ -14,13 +14,7 @@ function randomNum(min, max) {
 function updateSquareAndBounce(x, y, dx, dy, color, squares, particles) {
   let updatedDx = dx;
   let updatedDy = dy;
-  let destroyed = false;
-
-  // Calcular los límites de la pelota
-  const left = x - SQUARE_SIZE / 2;
-  const right = x + SQUARE_SIZE / 2;
-  const top = y - SQUARE_SIZE / 2;
-  const bottom = y + SQUARE_SIZE / 2;
+  let destroyed = false;  
 
   // Calcular la nueva posición de la pelota después del movimiento
   const nextX = x + dx;
