@@ -34,6 +34,7 @@ export function updateScoreElement(
   squares,
   scoreElement
 ) {
+  const totalSquares = numSquaresX * numSquaresY
   let dayScore = 0;
   let nightScore = 0;
   for (let i = 0; i < numSquaresX; i++) {
@@ -46,8 +47,11 @@ export function updateScoreElement(
     }
   }
 
+  const dayPercentage = (dayScore / totalSquares) * 100;
+  const nightPercentage = (nightScore / totalSquares) * 100;
+
   const contrastColor = calculateColorContrast(DAY_COLOR, NIGHT_COLOR);
 
   // scoreElement.textContent = `day ${dayScore} | night ${nightScore}`;
-  scoreElement.innerHTML = `<span style="color:${DAY_COLOR};-webkit-text-stroke: 0.5px ${NIGHT_COLOR};">day ${dayScore} </span> <span style="color:${contrastColor}">|</span> <span style="color:${NIGHT_COLOR}; -webkit-text-stroke: 0.5px ${DAY_COLOR};">night ${nightScore}</span>`;
+  scoreElement.innerHTML = `<span style="color:${DAY_COLOR};-webkit-text-stroke: 0.5px ${NIGHT_COLOR};">day ${dayPercentage.toFixed(2)}% </span> <span style="color:${contrastColor}">|</span> <span style="color:${NIGHT_COLOR}; -webkit-text-stroke: 0.5px ${DAY_COLOR};">night ${nightPercentage.toFixed(2)}%</span>`;
 }
