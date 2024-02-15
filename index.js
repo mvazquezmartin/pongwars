@@ -18,8 +18,8 @@ export const colorPalette = {
 export let SQUARE_SIZE = 15;
 export const BALL_SPEED = {
   MAX: 10,
-  MIN: 5
-}
+  MIN: 5,
+};
 // canvas.width = window.innerWidth;
 // canvas.height = window.innerHeight;
 
@@ -78,8 +78,8 @@ window.wallpaperPropertyListener = {
       const speed = properties.ballspeed.value;
       dx1 = dy2 = speed;
       dy1 = dx2 = -speed;
-      BALL_SPEED.MAX = speed + 2
-      BALL_SPEED.MIN = speed - 3
+      BALL_SPEED.MAX = speed + 2;
+      BALL_SPEED.MIN = speed - 3;
     }
     if (properties.hideparticles) {
       const hideValue = properties.hideparticles.value;
@@ -157,7 +157,6 @@ function draw() {
   updateScoreElement(DAY_COLOR, NIGHT_COLOR, squares, scoreElement);
 
   requestAnimationFrame(draw);
-  console.log({dx1, dy1, dx2, dy2})
 }
 
 updateSquareColors(squares);
