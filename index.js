@@ -78,6 +78,8 @@ window.wallpaperPropertyListener = {
       const speed = properties.ballspeed.value;
       dx1 = dy2 = speed;
       dy1 = dx2 = -speed;
+      BALL_SPEED.MAX = speed + 2
+      BALL_SPEED.MIN = speed - 3
     }
     if (properties.hideparticles) {
       const hideValue = properties.hideparticles.value;
