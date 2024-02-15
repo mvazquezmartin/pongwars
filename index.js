@@ -1,5 +1,5 @@
 import { drawParticles } from './functions/Particles.js';
-import { drawBall, drawBallTrail } from './functions/ball.js';
+import { drawBall, drawBallTrail } from './functions/balls.js';
 import { drawSquares, updateSquareColors } from './functions/drawCanva.js';
 import {
   checkBoundaryCollision,
@@ -16,6 +16,10 @@ export const colorPalette = {
   NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
 };
 export let SQUARE_SIZE = 15;
+export const BALL_SPEED = {
+  MAX: 10,
+  MIN: 5
+}
 // canvas.width = window.innerWidth;
 // canvas.height = window.innerHeight;
 
@@ -32,13 +36,13 @@ let isDrawParticle = false;
 
 let x1 = canvas.width / 4;
 let y1 = canvas.height / 2;
-let dx1 = 7.5;
-let dy1 = -7.5;
+let dx1 = 8;
+let dy1 = -8;
 
 let x2 = (canvas.width / 4) * 3;
 let y2 = canvas.height / 2;
-let dx2 = -7.5;
-let dy2 = 7.5;
+let dx2 = -8;
+let dy2 = 8;
 
 // PROPERTY WALLPAPER ENGINE
 window.wallpaperPropertyListener = {
@@ -151,6 +155,7 @@ function draw() {
   updateScoreElement(DAY_COLOR, NIGHT_COLOR, squares, scoreElement);
 
   requestAnimationFrame(draw);
+  console.log({dx1, dy1, dx2, dy2})
 }
 
 updateSquareColors(squares);
