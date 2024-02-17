@@ -12,8 +12,8 @@ export const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 
 export const colorPalette = {
-  MysticMint: 'rgb(217, 232, 227)', //day ball #D9E8E3
-  NocturnalExpedition: 'rgb(17, 76, 90)', //night ball #114C5A
+  MysticMint: 'rgb(247, 247, 247)', //'rgb(217, 232, 227)' day ball #D9E8E3
+  NocturnalExpedition: 'rgb(18, 18, 18)' //rgb(17, 76, 90)' night ball #114C5A
 };
 export let SQUARE_SIZE = 15;
 export const BALL_SPEED = {
