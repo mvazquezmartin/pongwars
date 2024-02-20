@@ -13,15 +13,15 @@ const scoreElement = document.getElementById('score');
 
 export const colorPalette = {
   MysticMint: 'rgb(231, 242, 246)', //'rgb(217, 232, 227)' day ball #D9E8E3
-  NocturnalExpedition: 'rgb(21, 29, 40)' //rgb(17, 76, 90)' night ball #114C5A
+  NocturnalExpedition: 'rgb(21, 29, 40)', //rgb(17, 76, 90)' night ball #114C5A
 };
 export let SQUARE_SIZE = 15;
 export const BALL_SPEED = {
   MAX: 10,
   MIN: 5,
 };
-// canvas.width = window.innerWidth;
-// canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 canvas.width = 1020;
 canvas.height = 1020;
