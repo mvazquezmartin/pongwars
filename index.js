@@ -20,8 +20,8 @@ export const BALL_SPEED = {
   MAX: 10,
   MIN: 5,
 };
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
 
 canvas.width = 1020;
 canvas.height = 1020;
