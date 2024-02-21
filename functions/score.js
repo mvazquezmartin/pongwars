@@ -51,7 +51,6 @@ export function updateScoreElement(
   const nightPercentage = (nightScore / totalSquares) * 100;
 
   const contrastColor = calculateColorContrast(DAY_COLOR, NIGHT_COLOR);
-
-  // scoreElement.textContent = `day ${dayScore} | night ${nightScore}`;
+  
   scoreElement.innerHTML = `<span style="color:${DAY_COLOR};-webkit-text-stroke: 0.5px ${NIGHT_COLOR};">day ${dayPercentage.toFixed(2)}% </span> <span style="color:${contrastColor}">|</span> <span style="color:${NIGHT_COLOR}; -webkit-text-stroke: 0.5px ${DAY_COLOR};">night ${nightPercentage.toFixed(2)}%</span>`;
 }

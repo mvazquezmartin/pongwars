@@ -26,14 +26,14 @@ class Particle {
   }
 
   draw(ctx) {
-    const rgbValues = this.color.match(/\d+/g); // Extraer los valores RGB como números
+    const rgbValues = this.color.match(/\d+/g); 
     const r = parseInt(rgbValues[0]);
     const g = parseInt(rgbValues[1]);
     const b = parseInt(rgbValues[2]);
 
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`; // Usar los valores RGB extraídos
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity})`;
     ctx.fill();
     ctx.closePath();
   }
